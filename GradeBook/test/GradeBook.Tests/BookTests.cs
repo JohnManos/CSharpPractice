@@ -1,11 +1,14 @@
 using System;
 using Xunit;
 
-namespace GradeBook.Test {
-    public class BookTests {    
+namespace GradeBook.Test
+{
+    public class BookTests
+    {    
         
         [Fact]
-        public void BookCalculatesAnAverageGrade() {
+        public void BookCalculatesAnAverageGrade()
+        {
             //arrange
             var book = new Book();
             book.AddGrade(69.2);
