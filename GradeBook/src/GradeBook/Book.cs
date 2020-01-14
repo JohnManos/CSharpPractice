@@ -8,8 +8,9 @@ namespace GradeBook
         public string Name;
         private List<double> grades;
 
-        public Book()
+        public Book(string name)
         { 
+            Name = name;
             grades = new List<double>();
         }
 
