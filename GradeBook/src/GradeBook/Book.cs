@@ -46,7 +46,7 @@ namespace GradeBook
             result.LowestScore = double.MaxValue;
             result.HighestScore = double.MinValue;
             result.AverageScore = 0.0;
-            
+
             foreach (var grade in grades)
             { 
                 if (grade < result.LowestScore)
@@ -86,7 +86,7 @@ namespace GradeBook
 
         public void ShowStatistics(Statistics stats)
         { 
-            Console.WriteLine($"Lowest score: {stats.LowestScore}, Highest Score: {stats.HighestScore}, Average Score: {stats.AverageScore}");
+            Console.WriteLine($"Lowest score: {stats.LowestScore}, Highest Score: {stats.HighestScore}, Average Score: {stats.AverageScore:F1}");
         }
     }
 }
