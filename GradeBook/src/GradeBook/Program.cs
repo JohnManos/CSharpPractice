@@ -16,7 +16,18 @@ namespace GradeBook
                 {
                     break;
                 }
-                b.AddGrade(double.Parse(input));
+                try
+                {
+                    b.AddGrade(double.Parse(input));
+                }
+                catch(ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch(FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             var results = b.GetStatistics();

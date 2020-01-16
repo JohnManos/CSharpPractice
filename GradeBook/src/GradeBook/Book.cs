@@ -16,7 +16,14 @@ namespace GradeBook
 
         public void AddGrade(double grade)
         { 
-            grades.Add(grade);
+            if (grade <= 100 && grade >=0)
+            {
+                grades.Add(grade);
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid {nameof(grade)}");
+            }
         }
 
         public void AddGrade(char grade)
@@ -27,7 +34,7 @@ namespace GradeBook
                     AddGrade(90);
                     break;
                 case 'B':
-                    AddGrade(80);
+                    AddGrade(-80);
                     break;
                 case 'C':
                     AddGrade(70);
