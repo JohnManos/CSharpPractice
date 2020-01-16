@@ -65,6 +65,45 @@ namespace GradeBook.Test
             Assert.Equal("JOHN", upper);
         }
 
+        public delegate string WriteLogDelegate(string logMessage);
+        [Fact]
+        public void WriteLogDelegateCanPointToMethod()
+        {
+            WriteLogDelegate log;
+
+            log = new WriteLogDelegate(ReturnMessage);
+            // alternatively...
+            /*log = ReturnMessage*/
+
+            var result = log("Hello!");
+            Assert.Equal("Hello!", result);
+        }
+
+        int count = 0;
+        [Fact]
+        public void WriteLogDelegateCanPointToMultipleMethods()
+        {
+            WriteLogDelegate log = ReturnMessage;
+
+            log += ReturnMessage;
+            log += IncrementCount;
+            
+            var result = log("Hello!");
+            Assert.Equal(3, count);
+        }
+
+        string ReturnMessage(string message)
+        {
+            count++;
+            return message;
+        }
+
+        string IncrementCount(string mynamedontmatter)
+        {
+            count++;
+            return mynamedontmatter;
+        }
+
         private string MakeUpperCase(string param)
         {
             return param.ToUpper();
