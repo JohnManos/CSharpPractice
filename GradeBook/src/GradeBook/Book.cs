@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace GradeBook
 {
+    public delegate void GradeAddedDelegate(object sender, EventArgs args); // remember delegates are type definitions. The parameters here are part of csharp's event conventions.
+
     public class Book
     { 
         // This is a property.
@@ -15,6 +17,7 @@ namespace GradeBook
             /*private*/ set /*{name = value;}*/;
         }
         /*private string name;*/
+        public event GradeAddedDelegate GradeAdded; // event keyword modifies an instance of a delegate. Book has a GradeAdded event as a field
         // Readonly members can be set during initialization or in the constructor, but NOWHERE else not even within this class 
         // (whereas const keyword means it can only be set once during initialization but NOT a 2nd time in the constructor)
         readonly string category;
@@ -39,6 +42,10 @@ namespace GradeBook
             if (grade <= 100 && grade >=0)
             {
                 grades.Add(grade);
+                if (GradeAdded != null) // if the caller has specified some behavior upon adding a grade ("handling" the event)
+                {
+                    GradeAdded(this, new EventArgs()); // do that behavior. this object instance is the sender. eventargs can be used to specify
+                }
             }
             else
             {

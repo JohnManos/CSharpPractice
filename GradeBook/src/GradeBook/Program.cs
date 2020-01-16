@@ -7,6 +7,10 @@ namespace GradeBook
         static void Main(string[] args)
         {
             var b = new Book("book");
+            b.GradeAdded += OnGradeAdded;
+            // b. GradeAdded = null <-- this wopuld throw a compiler error because events cannot be directly assigned, only added or subtracted to.
+            // ^^ that is because with an event you either want to subscribe or unsubscribe to/from it, assigning it would unsubscribe everyone else which would be wack yo
+
             Console.WriteLine("Please enter grades to calculate score statistics, and/or q to finish.");
             var done = false;
             while (!done)
@@ -32,6 +36,11 @@ namespace GradeBook
 
             var results = b.GetStatistics();
             b.ShowStatistics(results);
+        }
+
+        static void OnGradeAdded(object sender, EventArgs eventArgs)
+        {
+            Console.WriteLine("A grade was added.");
         }
     }
 }
