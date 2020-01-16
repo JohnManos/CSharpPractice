@@ -5,12 +5,32 @@ namespace GradeBook
 {
     public class Book
     { 
-        public string Name;
+        // This is a property.
+        // A property is essentially a public field that implicitly wraps a private field (whether or not you declare such a field).
+        // Accessing the property through "b.Name" implicitly calls a getter or setter for a "private name" field.
+        // Specific getter or setter behavior can be specified within the get{} or set{}. 
+        public string Name
+        {
+            get/*{ return name;}*/;
+            /*private*/ set /*{name = value;}*/;
+        }
+        /*private string name;*/
+        // Readonly members can be set during initialization or in the constructor, but NOWHERE else not even within this class 
+        // (whereas const keyword means it can only be set once during initialization but NOT a 2nd time in the constructor)
+        readonly string category;
         private List<double> grades;
 
         public Book(string name)
         { 
             Name = name;
+            grades = new List<double>();
+        }
+        public Book(string name, string category)
+        { 
+            Name = name;
+            this.category = category;
+            this.category = "Hi"; // see this doesn't cause a compiler error, unlike const which would
+            this.category = category;
             grades = new List<double>();
         }
 
