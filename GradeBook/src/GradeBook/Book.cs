@@ -54,14 +54,15 @@ namespace GradeBook
         {
             if (grade <= 100 && grade >= 0)
             {
-                StreamWriter sw = File.AppendText($"{Name}.txt");
-                sw.Write((char) grade);
-                sw.WriteLine();
-                if (GradeAdded != null) // if the caller has specified some behavior upon adding a grade ("handling" the event)
+                using (StreamWriter sw = File.AppendText($"{Name}.txt"))
                 {
-                    GradeAdded(this, new EventArgs()); // do that behavior. this object instance is the sender. eventargs can be used to specify
+                    sw.Write((char) grade);
+                    sw.WriteLine();
+                    if (GradeAdded != null) // if the caller has specified some behavior upon adding a grade ("handling" the event)
+                    {
+                        GradeAdded(this, new EventArgs()); // do that behavior. this object instance is the sender. eventargs can be used to specify
+                    }
                 }
-                sw.Close();
             }
             else
             {
