@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace GradeBook
 {
@@ -33,6 +35,90 @@ namespace GradeBook
         public virtual void ShowStatistics(Statistics stats) // virtual keyword means that the class specifies an implementation, but that imp can still be overriden.
         { 
             Console.WriteLine($"Lowest score: {stats.LowestScore}, Highest Score: {stats.HighestScore}, Average Score: {stats.AverageScore:F1}");
+        }
+    }
+
+    public class DiskBook : Book
+    {
+        public DiskBook(string name) : base(name)
+        {
+            /*if (!File.Exists(name))
+            {
+                fs = File.Open(name, FileMode.OpenOrCreate); // this opens it for reading or writing while also creating the file if it does not exist
+            }*/
+        }
+        public override string Name { get; set; }
+        public override event GradeAddedDelegate GradeAdded;
+
+        public override void AddGrade(double grade)
+        {
+            if (grade <= 100 && grade >= 0)
+            {
+                StreamWriter sw = File.AppendText($"{Name}.txt");
+                sw.Write((char) grade);
+                sw.WriteLine();
+                if (GradeAdded != null) // if the caller has specified some behavior upon adding a grade ("handling" the event)
+                {
+                    GradeAdded(this, new EventArgs()); // do that behavior. this object instance is the sender. eventargs can be used to specify
+                }
+                sw.Close();
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid {nameof(grade)}");
+            }
+        }
+        
+        public override Statistics GetStatistics()
+        {
+            List<double> grades = new List<double>();
+            StreamReader sw = File.OpenText($"{Name}.txt");
+            while (sw.Peek() != '\n')
+            {
+                //List<int> buf = new List<int>();
+                grades.Add(sw.Read());
+            }
+
+            var result = new Statistics();
+            result.LowestScore = double.MaxValue;
+            result.HighestScore = double.MinValue;
+            result.AverageScore = 0.0;
+
+            foreach (var grade in grades)
+            { 
+                if (grade < result.LowestScore)
+                { 
+                    result.LowestScore = grade;
+                }
+                if (grade > result.HighestScore)
+                { 
+                    result.HighestScore = grade;
+                }
+                result.AverageScore += grade;
+            }
+            result.AverageScore /= grades.Count;
+            
+            // Csharp's newer switch syntax (i would just use if/else here but heck why not)
+            switch(result.AverageScore)
+            {
+                case var g when g >= 90:
+                    result.Letter = 'A';
+                    break;
+                case var g when g >= 80:
+                    result.Letter = 'B';
+                    break;
+                case var g when g >= 70:
+                    result.Letter = 'C';
+                    break;
+                case var g when g >= 60:
+                    result.Letter = 'D';
+                    break;
+                default:
+                    result.Letter = 'F';
+                    break;
+            }
+
+            return result;
         }
     }
 
