@@ -53,11 +53,13 @@ namespace GradeBook
         {
             get
             {
-                StreamReader sw = File.OpenText($"{Name}.txt");
-                while (sw.Peek() != '\n')
+                using (StreamReader sw = File.OpenText($"{Name}.txt"))
                 {
-                    statistics.Add(sw.Read());
-                }            
+                    while (sw.Peek() > -1)
+                    {
+                        statistics.Add(double.Parse(sw.ReadLine()));
+                    }             
+                }
                 return statistics;
             }
         }
@@ -70,8 +72,7 @@ namespace GradeBook
             {
                 using (StreamWriter sw = File.AppendText($"{Name}.txt"))
                 {
-                    sw.Write((char) grade);
-                    sw.WriteLine();
+                    sw.WriteLine(grade);
                     if (GradeAdded != null) // if the caller has specified some behavior upon adding a grade ("handling" the event)
                     {
                         GradeAdded(this, new EventArgs()); // do that behavior. this object instance is the sender. eventargs can be used to specify
