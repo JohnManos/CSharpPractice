@@ -5,16 +5,35 @@ namespace GradeBook
 {
     public delegate void GradeAddedDelegate(object sender, EventArgs args); // remember delegates are type definitions. The parameters here are part of csharp's event conventions.
 
-    public abstract class Book // abstract classes differ from interfaces in that they may or may not specify implementation
+    public interface IBook // interfaces are pure - they contain no implementation. they specify what kinds of things any Book should do
+    {
+        string Name { get; set; }     
+        // no category field here. Interfaces cannot have fields. They are defining a contract with the implementers, not implementation. Field are considered implementation.   
+        event GradeAddedDelegate GradeAdded;
+        void AddGrade(double grade); // no public keyword needed because it is assumed that any implkementer has a visible member for this
+        Statistics GetStatistics();
+    }
+
+    public abstract class Book : IBook // abstract classes differ from interfaces in that they may or may not specify implementation
     {
         public Book(string name)
         {
+            Name = name;
         }
         public Book(string name, string category)
         {
+            Name = name;
+            this.category = category;
         }
-
+        public abstract string Name { get; set; }
+        readonly string category; // fields are never 'abstract' because there is no implementation to be specified. Note that Name is a property, and GradeAdded is an event, not fields.
+        public abstract event GradeAddedDelegate GradeAdded;
         public abstract void AddGrade(double grade);
+        public abstract Statistics GetStatistics();
+        public virtual void ShowStatistics(Statistics stats) // virtual keyword means that the class specifies an implementation, but that imp can still be overriden.
+        { 
+            Console.WriteLine($"Lowest score: {stats.LowestScore}, Highest Score: {stats.HighestScore}, Average Score: {stats.AverageScore:F1}");
+        }
     }
 
     public class InMemoryBook : Book
@@ -23,13 +42,13 @@ namespace GradeBook
         // A property is essentially a public field that implicitly wraps a private field (whether or not you declare such a field).
         // Accessing the property through "b.Name" implicitly calls a getter or setter for a "private name" field.
         // Specific getter or setter behavior can be specified within the get{} or set{}. 
-        public string Name
+        public override string Name
         {
             get/*{ return name;}*/;
             /*private*/ set /*{name = value;}*/;
         }
         /*private string name;*/
-        public event GradeAddedDelegate GradeAdded; // event keyword modifies an instance of a delegate. Book has a GradeAdded event as a field
+        public override event GradeAddedDelegate GradeAdded; // event keyword modifies an instance of a delegate. Book has a GradeAdded event as a field
         // Readonly members can be set during initialization or in the constructor, but NOWHERE else not even within this class 
         // (whereas const keyword means it can only be set once during initialization but NOT a 2nd time in the constructor)
         readonly string category;
@@ -37,14 +56,11 @@ namespace GradeBook
 
         public InMemoryBook(string name) : base(name)
         { 
-            Name = name;
             grades = new List<double>();
         }
         public InMemoryBook(string name, string category) : base(name, category)
         { 
-            Name = name;
-            this.category = category;
-            this.category = "Hi"; // see this doesn't cause a compiler error, unlike const which would
+            this.category = "Hi"; // see modifying a readonly in the constuctor doesn't cause a compiler error, unlike const which would
             this.category = category;
             grades = new List<double>();
         }
@@ -86,7 +102,8 @@ namespace GradeBook
                     break;
             }
         }
-        public Statistics GetStatistics()
+        
+        public override Statistics GetStatistics()
         { 
             var result = new Statistics();
             result.LowestScore = double.MaxValue;
@@ -128,11 +145,6 @@ namespace GradeBook
             }
 
             return result;
-        }
-
-        public void ShowStatistics(Statistics stats)
-        { 
-            Console.WriteLine($"Lowest score: {stats.LowestScore}, Highest Score: {stats.HighestScore}, Average Score: {stats.AverageScore:F1}");
         }
     }
 }

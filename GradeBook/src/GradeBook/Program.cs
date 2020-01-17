@@ -17,7 +17,7 @@ namespace GradeBook
             b.ShowStatistics(results);
         }
 
-        private static void EnterGrades(Book b) // for entering grades, we don't really care what kind of book, just that it is a book
+        private static void EnterGrades(IBook b) // for entering grades, we don't really care what kind of book, just that it is a book
         {
             Console.WriteLine("Please enter grades to calculate score statistics, and/or q to finish.");
             var done = false;
