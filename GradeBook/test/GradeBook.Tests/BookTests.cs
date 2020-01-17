@@ -15,10 +15,10 @@ namespace GradeBook.Test
             book.AddGrade(75);
             
             //act
-            var result = book.GetStatistics();
+            var result = book.Statistics;
 
             //assert
-            Assert.Equal(75.2, result.AverageScore, 1); // third arg indicates float precision
+            Assert.Equal(75.2, result.Average, 1); // third arg indicates float precision
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace GradeBook.Test
             book.AddGrade(75);
             
             //act
-            var result = book.GetStatistics();
+            var result = book.Statistics;
 
             //assert
             Assert.Equal('C', result.Letter);

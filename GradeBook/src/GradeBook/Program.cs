@@ -32,8 +32,7 @@ namespace GradeBook
             // ^^ that is because with an event you either want to subscribe or unsubscribe to/from it, assigning it would unsubscribe everyone else which would be wack yo
             EnterGrades(book);
 
-            var results = book.GetStatistics();
-            book.ShowStatistics(results);
+            book.ShowStatistics();
         }
 
         private static void EnterGrades(IBook b) // for entering grades, we don't really care what kind of book, just that it is a book
