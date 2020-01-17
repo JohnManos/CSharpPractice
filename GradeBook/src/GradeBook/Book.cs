@@ -5,7 +5,19 @@ namespace GradeBook
 {
     public delegate void GradeAddedDelegate(object sender, EventArgs args); // remember delegates are type definitions. The parameters here are part of csharp's event conventions.
 
-    public class Book
+    public abstract class Book // abstract classes differ from interfaces in that they may or may not specify implementation
+    {
+        public Book(string name)
+        {
+        }
+        public Book(string name, string category)
+        {
+        }
+
+        public abstract void AddGrade(double grade);
+    }
+
+    public class InMemoryBook : Book
     { 
         // This is a property.
         // A property is essentially a public field that implicitly wraps a private field (whether or not you declare such a field).
@@ -23,12 +35,12 @@ namespace GradeBook
         readonly string category;
         private List<double> grades;
 
-        public Book(string name)
+        public InMemoryBook(string name) : base(name)
         { 
             Name = name;
             grades = new List<double>();
         }
-        public Book(string name, string category)
+        public InMemoryBook(string name, string category) : base(name, category)
         { 
             Name = name;
             this.category = category;
@@ -37,7 +49,7 @@ namespace GradeBook
             grades = new List<double>();
         }
 
-        public void AddGrade(double grade)
+        public override void AddGrade(double grade) // must add override keyword to implement abstract base class members
         { 
             if (grade <= 100 && grade >=0)
             {

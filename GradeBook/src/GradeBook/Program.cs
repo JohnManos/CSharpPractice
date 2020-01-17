@@ -6,7 +6,7 @@ namespace GradeBook
     {
         static void Main(string[] args)
         {
-            var b = new Book("book");
+            var b = new InMemoryBook("book"); // lets say we want an InMemoryBook object here, but... (see EnterGrades())
             b.GradeAdded += OnGradeAdded;
             // b. GradeAdded = null <-- this wopuld throw a compiler error because events cannot be directly assigned, only added or subtracted to.
             // ^^ that is because with an event you either want to subscribe or unsubscribe to/from it, assigning it would unsubscribe everyone else which would be wack yo
@@ -17,7 +17,7 @@ namespace GradeBook
             b.ShowStatistics(results);
         }
 
-        private static void EnterGrades(Book b)
+        private static void EnterGrades(Book b) // for entering grades, we don't really care what kind of book, just that it is a book
         {
             Console.WriteLine("Please enter grades to calculate score statistics, and/or q to finish.");
             var done = false;

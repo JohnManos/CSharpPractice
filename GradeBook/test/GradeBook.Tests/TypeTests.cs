@@ -109,25 +109,25 @@ namespace GradeBook.Test
             return param.ToUpper();
         }
 
-        private Book GetBook(string name)
+        private InMemoryBook GetBook(string name)
         {
-            return new Book(name);
+            return new InMemoryBook(name);
         }
 
-        private void SetBookName(Book book, string name)
+        private void SetBookName(InMemoryBook book, string name)
         {
             book.Name = name;
         }
 
-        private void GetBookSetName(Book book, string name)
+        private void GetBookSetName(InMemoryBook book, string name)
         {
-            book =  new Book(name);
+            book =  new InMemoryBook(name);
             book.Name = name;
         }
 
-        private void GetBookSetName(ref Book book, string name)
+        private void GetBookSetName(ref InMemoryBook book, string name)
         {
-            book =  new Book(name);
+            book =  new InMemoryBook(name);
         }
     }
 }
